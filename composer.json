@@ -7,5 +7,7 @@
             "email": "jehaby@ya.ru"
         }
     ],
-    "require": {}
+    "require": {
+        "illuminate/support": "^5.1"
+    }
 }
