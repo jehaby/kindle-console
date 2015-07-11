@@ -1,4 +1,4 @@
-<?php
+<?php namespace Jehaby\Kindle;
 
 
 class Book

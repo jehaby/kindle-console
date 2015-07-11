@@ -1,13 +1,16 @@
 {
-    "name": "jehaby/kindle-console",
-    "description": "Console scripts for parsing 'My clippings.txt'",
-    "authors": [
-        {
-            "name": "Stas Makarov",
-            "email": "jehaby@ya.ru"
-        }
-    ],
-    "require": {
-        "illuminate/support": "^5.1"
+  "name": "jehaby/kindle-console",
+  "description": "Console scripts for parsing 'My clippings.txt'",
+  "authors": [
+    {
+      "name": "Stas Makarov",
+      "email": "jehaby@ya.ru"
     }
+  ],
+  "require": {
+    "illuminate/support": "^5.1"
+  },
+  "autoload": {
+    "psr-4": {"Jehaby\\Kindle\\": "src/"}
+  }
 }
