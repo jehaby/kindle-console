@@ -12,13 +12,13 @@ class Client {
 
     public function doStaff() {
 
-        $collection = new Collection([1, 23,89, 83]);
+        $parser = new Kindle\ClippingsParser(file_get_contents('My Clippings.txt'));
 
-        $collection->slice(1,2, true);
-
-        var_dump($collection);
+//        $parser->getCollection();
 
     }
 
 
 }
+
+
