@@ -29,5 +29,12 @@ class Highlight
 //        var_dump(func_get_args());
     }
 
+    public function getBook()
+    {
+        return $this->book;
+    }
+
+    
+
 
 }

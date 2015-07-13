@@ -20,10 +20,17 @@ class HighlightsManager
         $this->collection = $this->parser->getCollection();
     }
 
-
     public function getBooks()
     {
-        
+
+    }
+
+    
+    public function groupByBooks()
+    {
+        return $this->collection->groupBy(function($highlight) {
+            return $highlight->getBook();
+        });
     }
 
 

@@ -9,14 +9,27 @@ use \Illuminate\Support\Collection;
 
 class Client {
 
+    public function doStuff()
+    {
+        $collection = new Kindle\HighlightsCollection(file_get_contents('My Clippings.txt'));
 
-    public function doStaff() {
+        foreach ($collection->groupByBooks() as $key => $value) {
+            echo trim($key) . ' => ' . count($value) . "\n";
+        }
 
-        $parser = new Kindle\ClippingsParser(file_get_contents('My Clippings.txt'));
+        die();
+        
+        
+        $manager = new Kindle\HighlightsManager(file_get_contents('My Clippings.txt'));
+        
+        foreach ($manager->groupByBooks() as $key => $value) {
+            echo trim($key) . ' => ' . count($value) . "\n";
 
-//        $parser->getCollection();
-
+            
+        }
+        
     }
+
 
 
 }

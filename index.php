@@ -6,4 +6,4 @@ error_reporting(E_ALL);
 
 
 $client = new Client();
-$client->doStaff();
+$client->doStuff();

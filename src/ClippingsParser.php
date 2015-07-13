@@ -27,7 +27,7 @@ class ClippingsParser {
 
     private function parseFile($file_content)
     {
-
+        
         $raw_highlights = explode("==========", $file_content);
 
         $collection = new Collection();
@@ -43,6 +43,7 @@ class ClippingsParser {
             unset($raw_highlights[$key]);
         }
 
+        return $collection;
     }
 
 
