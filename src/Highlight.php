@@ -29,9 +29,42 @@ class Highlight
 //        var_dump(func_get_args());
     }
 
+
     public function getBook()
     {
         return $this->book;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLocation()
+    {
+        return $this->location;
+    }
+
+    /**
+     * @return string
+     */
+    public function getText()
+    {
+        return $this->text;
+    }
+
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getDateAdded()
+    {
+        return $this->dateAdded;
     }
 
     

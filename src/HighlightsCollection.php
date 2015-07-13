@@ -7,21 +7,6 @@ use Illuminate\Support\Collection;
 class HighlightsCollection extends Collection {
 
 
-    private $parser;
-
-
-    public function __construct($file_content)
-    {
-        if (is_array($file_content)) {
-            parent::__construct($file_content);
-            return;
-        }
-        
-        $this->parser = new ClippingsParser($file_content);
-        $this->items = $this->parser->getCollection()->toArray();
-    }
-
-
     public function groupByBooks()
     {
         return (new Collection($this->items))->groupBy(function($highlight) {
@@ -70,7 +55,9 @@ class HighlightsCollection extends Collection {
     
     public function getFromBook($book)
     {
-
+        return $this->filter(function($item) use ($book) {
+            trim($item->getBook()) == $book;
+        }) ;
     }
 
     

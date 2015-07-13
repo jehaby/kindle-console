@@ -30,13 +30,14 @@ class ClippingsParser {
         
         $raw_highlights = explode("==========", $file_content);
 
-        $collection = new Collection();
+        $collection = new HighlightsCollection();
 
         foreach ($raw_highlights as $key => $raw_highlight) {
 
             try {
                 $collection->push($this->parseRawHighlight($raw_highlight));
             } catch (\Exception $e) {
+                // TODO: log exception somewhere!
                 continue;
             }
 
