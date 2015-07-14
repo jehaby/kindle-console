@@ -27,22 +27,19 @@ class Client {
 
         var_dump($collection->count());
 
-        var_dump($collection->getFromBook('Pro Git'));
 
-        
-
-        return;
-
-
-        $manager = new Kindle\HighlightsManager(file_get_contents('My Clippings.txt'));
-
-        foreach ($manager->groupByBooks() as $key => $value) {
-
-            var_dump($key);
+        foreach ($collection->groupByBooks() as $key => $value) {
             echo $key . ' => ' . count($value) . "\n";
-
-
         }
+
+
+        $fromBook = $collection->getFromBook('Pro Git');
+        var_dump($fromBook->count());
+
+        var_dump($fromBook->map(function(Kindle\Highlight $item) {
+            return $item->getText();
+        }));
+
 
     }
 

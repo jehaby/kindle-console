@@ -56,7 +56,7 @@ class HighlightsCollection extends Collection {
     public function getFromBook($book)
     {
         return $this->filter(function($item) use ($book) {
-            trim($item->getBook()) == $book;
+            return trim($item->getBook()) == $book;
         }) ;
     }
 
