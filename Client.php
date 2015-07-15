@@ -23,13 +23,32 @@ class Client {
     public function doStuff()
     {
 
+
         $collection = $this->factory->makeCollection(file_get_contents('My Clippings.txt'));
 
-        var_dump($collection->count());
+
+        $res = $collection->filter(function($item) {
+            return preg_match('/[^a-zA-Z]/', $item->getText()) && ! strpos($item->getText(), ' ');
+        });
+
+        var_dump(count($res));
+        print_r($res);
+
+
+        die();
+
+        $res = $collection->groupBy(function(Kindle\Highlight $item) {
+            return $item->getText();
+        })->filter(function($item) {
+            return count($item) == 4;
+        });
+
+        var_dump(count($res));
+        print_r($res);
 
 
         foreach ($collection->groupByBooks() as $key => $value) {
-            echo $key . ' => ' . count($value) . "\n";
+            echo trim($key) . ' => ' . count($value) . "\n";
         }
 
 

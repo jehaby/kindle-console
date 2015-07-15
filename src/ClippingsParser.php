@@ -58,7 +58,9 @@ class ClippingsParser {
             throw new \Exception("from parseRawHighlight, res != 3. Res: " . (new Collection($res))->toJson() .  "; count(\$res) = " . count($res) );
         }
 
-        $text = trim($res[3], " \t\n\r\0\x0B.,?-!");
+//        $text = trim($res[3], " \t\n\r\0\x0B.,?-!");
+
+        $text = trim($res[3], ' \t\n\r\0\x0B.,?-!:.";)(“”…�`\'');
 
         extract($this->parseTechInfo($res[1]));
 
