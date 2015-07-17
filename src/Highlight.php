@@ -14,6 +14,8 @@ class Highlight
 
     private $dateAdded;
 
+    private $isPluralized; // only for word!
+
 
     function __construct($text, $book, $type, $dateAdded, $location)
     {

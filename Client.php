@@ -28,6 +28,19 @@ class Client {
 
 
         $res = $collection->filter(function($item) {
+            return Kindle\Inflect::singularize($item->getText()) != $item->getText();
+        });
+
+        var_dump(count($res));
+        print_r($res);
+
+
+        die();
+
+
+
+
+        $res = $collection->filter(function($item) {
             return preg_match('/[^a-zA-Z]/', $item->getText()) && ! strpos($item->getText(), ' ');
         });
 

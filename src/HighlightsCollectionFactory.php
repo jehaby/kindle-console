@@ -4,6 +4,7 @@
 class HighlightsCollectionFactory {
 
 
+
     public function makeCollection($file_content)
     {
         if (is_array($file_content)) {
