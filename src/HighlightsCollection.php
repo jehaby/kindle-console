@@ -36,15 +36,21 @@ class HighlightsCollection extends Collection {
      */
     public function getPhrases()
     {
-        
+        return $this->filter(function (Highlight $item) {
+            return $item->getType() === Highlight::PHRASE;
+        });
     }
 
-    public function getCollocations()
-    {
-
-    }
 
     public function getWords()
+    {
+        return $this->filter(function (Highlight $item) {
+            return $item->getType() === Highlight::WORD;
+        });
+    }
+
+
+    public function getCollocations()
     {
 
     }

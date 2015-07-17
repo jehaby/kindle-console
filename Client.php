@@ -24,12 +24,15 @@ class Client {
     {
 
 
-        $collection = $this->factory->makeCollection(file_get_contents('My Clippings.txt'));
+        $collection = $this->factory->createCollection(file_get_contents('My Clippings.txt'));
+
 
 
         $res = $collection->filter(function($item) {
-            return Kindle\Inflect::singularize($item->getText()) != $item->getText();
+            return substr_count($item->getText(), ' ') > 1;
         });
+
+        $res = $collection->getPhrases();
 
         var_dump(count($res));
         print_r($res);

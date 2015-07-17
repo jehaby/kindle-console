@@ -4,6 +4,10 @@
 class Highlight
 {
 
+    const WORD = 0;
+    const PHRASE = 1;
+
+
     private $location;
 
     private $text;
@@ -17,7 +21,7 @@ class Highlight
     private $isPluralized; // only for word!
 
 
-    function __construct($text, $book, $type, $dateAdded, $location)
+    function __construct($text, $book, $type, $dateAdded, $location, $originalText = '')
     {
 
 //        var_dump(func_get_args());
@@ -27,6 +31,7 @@ class Highlight
         $this->type = $type;
         $this->dateAdded = $dateAdded;
         $this->location = $location;
+        $this->originalText = $originalText;
 
 //        var_dump(func_get_args());
     }

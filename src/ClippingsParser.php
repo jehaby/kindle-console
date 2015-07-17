@@ -10,7 +10,6 @@ use Illuminate\Support\Collection;
  */
 class ClippingsParser {
 
-    static $count = 0;
 
     private $collection;
 
@@ -48,7 +47,8 @@ class ClippingsParser {
     }
 
 
-    private function parseRawHighlight($raw_highlight){
+    private function parseRawHighlight($raw_highlight)
+    {
 
         $res =  array_filter(explode("\n", trim($raw_highlight)), function($item) {
             return trim($item);
@@ -58,18 +58,17 @@ class ClippingsParser {
             throw new \Exception("from parseRawHighlight, res != 3. Res: " . (new Collection($res))->toJson() .  "; count(\$res) = " . count($res) );
         }
 
-//        $text = trim($res[3], " \t\n\r\0\x0B.,?-!");
+        $text = trim($res[3], " \t\n\r\0\x0B.,?-!:.\";)(“”…�`'");
 
-        $text = trim($res[3], ' \t\n\r\0\x0B.,?-!:.";)(“”…�`\'');
-
-        extract($this->parseTechInfo($res[1]));
+        extract($this->parseTechInfo($res[1])); // TODO: is it very bad design?
 
         return new Highlight (
             $text,
             $res[0],
             $this->detectType($text),
             $dateAdded,
-            $location
+            $location,
+            $res[3]
         );
 
     }
@@ -77,7 +76,11 @@ class ClippingsParser {
 
     private function detectType($text)
     {
-        return 'hz';
+        if (str_contains($text, ' ')) {
+            return Highlight::PHRASE;
+        }
+
+        return Highlight::WORD;
     }
 
 
@@ -97,11 +100,7 @@ class ClippingsParser {
     }
 
 
-
-    /**
-     * @param $file_content
-     */
-    function __construct($file_content)
+    public function createCollection($file_content)
     {
         $this->collection = $this->parseFile($file_content);
     }
