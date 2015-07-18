@@ -17,7 +17,7 @@ class HighlightsCollection extends Collection {
     /**
      * Push an item onto the end of the collection.
      *
-     * @param  mixed $value
+     * @param  Highlight $value
      * @return $this
      */
     public function push($value)
@@ -50,18 +50,13 @@ class HighlightsCollection extends Collection {
     }
 
 
-    public function getCollocations()
-    {
+//    public function getCollocations()
+//    {
+//
+//    }
 
-    }
 
 
-    public function getByType()
-    {
-
-    }
-
-    
     public function getEnglish()
     {
 

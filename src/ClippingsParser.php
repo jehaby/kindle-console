@@ -11,9 +11,16 @@ use Illuminate\Support\Collection;
 class ClippingsParser {
 
 
+    /**
+     * @var
+     */
     private $collection;
 
 
+    /**
+     * @param $item
+     * @return array
+     */
     private function processRawHighlight($item)
     {
         return array_filter(explode("\n", trim($item)), function($item) {
@@ -24,6 +31,10 @@ class ClippingsParser {
     }
 
 
+    /**
+     * @param $file_content
+     * @return HighlightsCollection
+     */
     private function parseFile($file_content)
     {
         
@@ -47,6 +58,11 @@ class ClippingsParser {
     }
 
 
+    /**
+     * @param $raw_highlight
+     * @return Highlight
+     * @throws \Exception
+     */
     private function parseRawHighlight($raw_highlight)
     {
 
@@ -64,7 +80,7 @@ class ClippingsParser {
 
         return new Highlight (
             $text,
-            $res[0],
+            $this->parseBook($res[0]),
             $this->detectType($text),
             $dateAdded,
             $location,
@@ -74,6 +90,10 @@ class ClippingsParser {
     }
 
 
+    /**
+     * @param $text
+     * @return int
+     */
     private function detectType($text)
     {
         if (str_contains($text, ' ')) {
@@ -84,6 +104,11 @@ class ClippingsParser {
     }
 
 
+    /**
+     * @param $tech
+     * @return array
+     * @throws \Exception
+     */
     private function parseTechInfo($tech)
     {
 
@@ -100,6 +125,9 @@ class ClippingsParser {
     }
 
 
+    /**
+     * @param $file_content
+     */
     public function createCollection($file_content)
     {
         $this->collection = $this->parseFile($file_content);
@@ -115,6 +143,17 @@ class ClippingsParser {
     }
 
 
+    /**
+     *
+     * @param $raw_book
+     */
+    public function parseBook($raw_book)  // TODO: maybe move to book factory
+    {
+        // TODO: I should probably check for errors here (valid argument, etc)
+//        preg_match('/(.*) \((.*)\)$/', $raw_book, $matches ); // TODO: test speed with other implementation (string search) Think about optimizing regex
+
+  //      return new Book($matches[1], $matches[2]);
+    }
 
 
 }
