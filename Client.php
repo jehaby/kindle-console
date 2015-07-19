@@ -3,7 +3,8 @@
 require 'vendor/autoload.php';
 
 use \Jehaby\Kindle;
-use \Illuminate\Support\Collection;
+
+
 
 
 
@@ -23,19 +24,19 @@ class Client {
     public function doStuff()
     {
 
-
         $collection = $this->factory->createCollection(file_get_contents('My Clippings.txt'));
-
-
 
         $res = $collection->filter(function($item) {
             return substr_count($item->getText(), ' ') > 1;
         });
 
-        $res = $collection->getPhrases();
+//        $res = $collection->phrases();
+
+        $res = $collection->phrases()->english();
+
 
         var_dump(count($res));
-        print_r($res);
+        var_dump($res);
 
 
         die();

@@ -34,7 +34,7 @@ class HighlightsCollection extends Collection {
       
 
      */
-    public function getPhrases()
+    public function phrases()
     {
         return $this->filter(function (Highlight $item) {
             return $item->getType() === Highlight::PHRASE;
@@ -42,7 +42,7 @@ class HighlightsCollection extends Collection {
     }
 
 
-    public function getWords()
+    public function words()
     {
         return $this->filter(function (Highlight $item) {
             return $item->getType() === Highlight::WORD;
@@ -57,19 +57,24 @@ class HighlightsCollection extends Collection {
 
 
 
-    public function getEnglish()
+    public function english()
     {
+        return $this->filter(function (Highlight $item) {
+            return ! preg_match('/[А-Яа-яЁё]/u', $item->getText());
+        });
+    }
+
+    
+    public function russian()
+    {
+        return $this->filter(function (Highlight $item) {
+            return preg_match('/[А-Яа-яЁё]/u', $item->getText());
+        });
 
     }
 
     
-    public function getRussian()
-    {
-
-    }
-
-    
-    public function getFromBook($book)
+    public function fromBook($book)
     {
         return $this->filter(function($item) use ($book) {
             return trim($item->getBook()) == $book;

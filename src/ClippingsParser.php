@@ -2,13 +2,18 @@
 
 
 use Illuminate\Support\Collection;
+use Jehaby\Kindle\Contracts\BookCreator;
+use Jehaby\Kindle\Contracts\HighlightCreator;
 
 
 /**
  * Class ClippingsParser
  * @package Jehaby\Kindle
  */
-class ClippingsParser {
+class ClippingsParser implements Contracts\CollectionCreator{
+
+
+    private $raw_books = [];
 
 
     /**
@@ -16,26 +21,17 @@ class ClippingsParser {
      */
     private $collection;
 
+
+
     /**
      * ClippingsParser constructor.
+     * @param array $raw_books
      */
-    public function __construct()
+    public function __construct(HighlightCreator $highlightCreator)
     {
+        $this->highlightCreator = $highlightCreator;
     }
 
-
-    /**
-     * @param $item
-     * @return array
-     */
-    private function processRawHighlight($item)
-    {
-        return array_filter(explode("\n", trim($item)), function($item) {
-
-            return trim($item);// return trim($item) ? true : false;  is it the same for array_filter?
-
-        } );
-    }
 
 
     /**
@@ -52,7 +48,7 @@ class ClippingsParser {
         foreach ($raw_highlights as $key => $raw_highlight) {
 
             try {
-                $collection->push($this->parseRawHighlight($raw_highlight));
+                $collection->push($this->highlightCreator->createHighlight($raw_highlight));
             } catch (\Exception $e) {
                 // TODO: log exception somewhere!
                 continue;
@@ -65,71 +61,9 @@ class ClippingsParser {
     }
 
 
-    /**
-     * @param $raw_highlight
-     * @return Highlight
-     * @throws \Exception
-     */
-    private function parseRawHighlight($raw_highlight)
-    {
-
-        $res =  array_filter(explode("\n", trim($raw_highlight)), function($item) {
-            return trim($item);
-        } );
-
-        if (count($res) != 3) {
-            throw new \Exception("from parseRawHighlight, res != 3. Res: " . (new Collection($res))->toJson() .  "; count(\$res) = " . count($res) );
-        }
-
-        $text = trim($res[3], " \t\n\r\0\x0B.,?-!:.\";)(“”…�`'");
-
-        extract($this->parseTechInfo($res[1])); // TODO: is it very bad design?
-
-        return new Highlight (
-            $text,
-            $this->parseBook($res[0]),
-            $this->detectType($text),
-            $dateAdded,
-            $location,
-            $res[3]
-        );
-
-    }
 
 
-    /**
-     * @param $text
-     * @return int
-     */
-    private function detectType($text)
-    {
-        if (str_contains($text, ' ')) {
-            return Highlight::PHRASE;
-        }
 
-        return Highlight::WORD;
-    }
-
-
-    /**
-     * @param $tech
-     * @return array
-     * @throws \Exception
-     */
-    public function parseTechInfo($tech)
-    {
-
-        preg_match('/.*Location ([\d-]{1,15}) \| Added on (.*)[[:cntrl:]]?/', $tech, $matches);
-
-        if (count($matches) !== 3)
-            throw new \Exception('Something went wrong in parseTechInfo. Tech: ' . $tech);
-
-        return [
-            'location' => trim($matches[1]),
-            'dateAdded' => trim($matches[2]),
-        ];
-
-    }
 
 
     /**
@@ -150,19 +84,6 @@ class ClippingsParser {
     }
 
 
-    /**
-     *
-     * @param $raw_book
-     */
-    public function parseBook($raw_book)  // TODO: maybe move to book factory
-    {
-        // TODO: I should probably check for errors here (valid argument, etc)
-        preg_match('/(.*) \((.*)\)$/', $raw_book, $matches ); // TODO: test speed with other implementation (string search) Think about optimizing regex
-
-        return new Book($matches[1], $matches[2]);
-        return [$matches[1], $matches[2]];
-
-    }
 
 
 }

@@ -1,4 +1,4 @@
-<?php namespace \Jehaby\Kindle\Contracts;
+<?php namespace Jehaby\Kindle\Contracts;
 
 
 /**
@@ -10,7 +10,7 @@ interface CollectionCreator {
     /**
      * @return mixed
      */
-    public function createCollection();
+    public function createCollection($file_content);
 
 
 }
