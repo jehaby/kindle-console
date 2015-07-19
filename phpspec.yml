@@ -1,0 +1,4 @@
+suites:
+    jehaby_suite:
+        namespace: Jehaby\Kindle
+        psr4_prefix: Jehaby\Kindle

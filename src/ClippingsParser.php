@@ -16,6 +16,13 @@ class ClippingsParser {
      */
     private $collection;
 
+    /**
+     * ClippingsParser constructor.
+     */
+    public function __construct()
+    {
+    }
+
 
     /**
      * @param $item
@@ -109,7 +116,7 @@ class ClippingsParser {
      * @return array
      * @throws \Exception
      */
-    private function parseTechInfo($tech)
+    public function parseTechInfo($tech)
     {
 
         preg_match('/.*Location ([\d-]{1,15}) \| Added on (.*)[[:cntrl:]]?/', $tech, $matches);
@@ -150,9 +157,11 @@ class ClippingsParser {
     public function parseBook($raw_book)  // TODO: maybe move to book factory
     {
         // TODO: I should probably check for errors here (valid argument, etc)
-//        preg_match('/(.*) \((.*)\)$/', $raw_book, $matches ); // TODO: test speed with other implementation (string search) Think about optimizing regex
+        preg_match('/(.*) \((.*)\)$/', $raw_book, $matches ); // TODO: test speed with other implementation (string search) Think about optimizing regex
 
-  //      return new Book($matches[1], $matches[2]);
+        return new Book($matches[1], $matches[2]);
+        return [$matches[1], $matches[2]];
+
     }
 
 

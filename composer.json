@@ -12,5 +12,8 @@
   },
   "autoload": {
     "psr-4": {"Jehaby\\Kindle\\": "src/"}
+  },
+  "require-dev": {
+    "phpspec/phpspec": "^2.2"
   }
 }
