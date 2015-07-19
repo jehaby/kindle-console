@@ -35,7 +35,7 @@ class KindleHighlightCreator implements Contracts\HighlightCreator
             $text,
             $this->bookCreator->createBook(trim($res[0])),
             $this->detectType($text),
-            $this->parseDate(substr($res[1], strrpos($res[1], '|'))),
+            $this->parseDate(substr($res[1], strrpos($res[1], '|'))),    // TODO: I guess this is suck and should be refactored
             $this->parseLocation(substr($res[1], 0, strrpos($res[1], '|'))),
             $res[3]
         );
@@ -44,15 +44,7 @@ class KindleHighlightCreator implements Contracts\HighlightCreator
 
     private function parseDate($raw_date)
     {
-        preg_match('/ Added on (.*)[[:cntrl:]]?/', $raw_date, $matches);
-
-        if (count($matches) != 2) {
-            echo 'From parseDate';
-            var_dump($raw_date);
-            var_dump($matches);
-            die();
-        }
-
+        preg_match('/ Added on (.*)[[:cntrl:]]?/', $raw_date, $matches);   
         return $matches[1];
     }
 
@@ -60,15 +52,6 @@ class KindleHighlightCreator implements Contracts\HighlightCreator
     private function parseLocation($raw_location)
     {
         preg_match('/.* ([\d-]{1,15}) $/', $raw_location, $matches);
-
-
-        if (count($matches) != 2) {
-            echo 'From location';
-            var_dump($raw_location);
-            var_dump($matches);
-            die();
-        }
-
         return $matches[1];
     }
 
