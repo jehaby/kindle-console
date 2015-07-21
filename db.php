@@ -1,20 +1,26 @@
 <?php
 
-require 'vendor/autoload.php';
 
+
+require 'vendor/autoload.php';
+include "src/Book.php";
+
+use Illuminate\Events\Dispatcher;
+use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
+use Jehaby\Kindle\Book;
+use Jehaby\Kindle\Highlight;
+
 
 $capsule = new Capsule();
 
 $capsule->addConnection([
     'driver' => 'sqlite',
     'database' => 'storage/database.sqlite',
-    'prefix'   => '',
+//    'prefix'   => '',
 ]);
 
 
-use Illuminate\Events\Dispatcher;
-use Illuminate\Container\Container;
 
 $capsule->setEventDispatcher(new Dispatcher(new Container));
 
@@ -25,18 +31,12 @@ $capsule->setAsGlobal();
 
 dropTables($capsule);
 createTables($capsule);
+fillTables($capsule);
 
 
 
 
-
-
-$capsule->table('books')->insert(
-    [
-        'author' => 'Mark Twain',
-        'title'  => 'Tom Soyer',
-    ]
-);
+var_dump(Book::find(2));
 
 
 // ------------------------------------------------------- //
@@ -85,4 +85,22 @@ function createTables(Capsule $capsule)
 }
 
 
+/**
+ * @param $capsule
+ */
+function fillTables($capsule)
+{
+    $capsule->table('books')->insert(
+        [
+            [
+                'author' => 'Mark Twain',
+                'title' => 'Gek Finn',
+            ],
+            [
+                'author' => 'Ayn Rand',
+                'title' => 'Atlas Shrugged',
+            ]
+        ]
+    );
+}
 

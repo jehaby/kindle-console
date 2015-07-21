@@ -1,7 +1,10 @@
 <?php namespace Jehaby\Kindle;
 
 
-class Book
+use Illuminate\Database\Eloquent\Model;
+
+
+class Book extends Model
 {
 
     private $title;
