@@ -24,11 +24,8 @@ class HighlightsCollectionFactory {
     public function __construct($collectionCreator = null)
     {
 
-        if (! $collectionCreator) {
-            $this->collectionCreator = new ClippingsParser(new KindleHighlightCreator(new KindleBookCreator()));
-        } else {
-            $this->collectionCreator = $collectionCreator;
-        }
+        $this->collectionCreator = $collectionCreator ? $collectionCreator :
+            new ClippingsParser(new KindleHighlightCreator(new KindleBookCreator()));
 
     }
 

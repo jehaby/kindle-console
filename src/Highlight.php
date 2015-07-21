@@ -1,7 +1,9 @@
 <?php namespace Jehaby\Kindle;
 
+use Illuminate\Database\Eloquent\Model;
 
-class Highlight
+
+class Highlight extends Model
 {
 
     const WORD = 0;
@@ -21,20 +23,20 @@ class Highlight
     private $isPluralized; // only for word!
 
 
-    function __construct($text, $book, $type, $dateAdded, $location, $originalText = '')
-    {
-
-//        var_dump(func_get_args());
-
-        $this->text = $text;
-        $this->book = $book;
-        $this->type = $type;
-        $this->dateAdded = $dateAdded;
-        $this->location = $location;
-        $this->originalText = $originalText;
-
-//        var_dump(func_get_args());
-    }
+//    function __construct($text, $book, $type, $dateAdded, $location, $originalText = '')
+//    {
+//
+////        var_dump(func_get_args());
+//
+//        $this->text = $text;
+//        $this->book = $book;
+//        $this->type = $type;
+//        $this->dateAdded = $dateAdded;
+//        $this->location = $location;
+//        $this->originalText = $originalText;
+//
+////        var_dump(func_get_args());
+//    }
 
 
     public function getBook()
@@ -74,7 +76,17 @@ class Highlight
         return $this->dateAdded;
     }
 
-    
+    public function isWord()
+    {
+        return $this->type === SELF::WORD;
+    }
+
+    public function isPhrase()
+    {
+        return $this->type === SELF::PHRASE;
+    }
+
+
 
 
 }

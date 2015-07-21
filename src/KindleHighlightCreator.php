@@ -2,14 +2,16 @@
 
 
 use Illuminate\Support\Collection;
+use Jehaby\Kindle\Contracts\HighlightCreator as HighlightCreatorContract;
 
-class KindleHighlightCreator implements Contracts\HighlightCreator
+
+class KindleHighlightCreator implements HighlightCreatorContract
 {
 
     private $bookCreator;
 
 
-    public function __construct(KindleBookCreator $bookCreator = null)
+    public function __construct(KindleBookCreator $bookCreator = null) // TODO: code to interface??!
     {
         $this->bookCreator = $bookCreator ? $bookCreator : new KindleBookCreator();
     }
@@ -44,7 +46,7 @@ class KindleHighlightCreator implements Contracts\HighlightCreator
 
     private function parseDate($raw_date)
     {
-        preg_match('/ Added on (.*)[[:cntrl:]]?/', $raw_date, $matches);   
+        preg_match('/ Added on (.*)[[:cntrl:]]?/', $raw_date, $matches);
         return $matches[1];
     }
 
@@ -64,9 +66,6 @@ class KindleHighlightCreator implements Contracts\HighlightCreator
     {
         return str_contains(($text), ' ') ? Highlight::PHRASE : Highlight::WORD;
     }
-
-
-
 
 
 }

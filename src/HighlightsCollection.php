@@ -37,7 +37,7 @@ class HighlightsCollection extends Collection {
     public function phrases()
     {
         return $this->filter(function (Highlight $item) {
-            return $item->getType() === Highlight::PHRASE;
+            return $item->isPhrase();
         });
     }
 
@@ -45,16 +45,9 @@ class HighlightsCollection extends Collection {
     public function words()
     {
         return $this->filter(function (Highlight $item) {
-            return $item->getType() === Highlight::WORD;
+            return $item->isWord();
         });
     }
-
-
-//    public function getCollocations()
-//    {
-//
-//    }
-
 
 
     public function english()
@@ -74,10 +67,10 @@ class HighlightsCollection extends Collection {
     }
 
     
-    public function fromBook($book)
+    public function fromBook($book)  // TODO: think about better implementation
     {
         return $this->filter(function($item) use ($book) {
-            return trim($item->getBook()) == $book;
+            return $item->getBook() == $book;
         }) ;
     }
 

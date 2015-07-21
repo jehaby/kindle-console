@@ -10,10 +10,8 @@ use Jehaby\Kindle\Contracts\HighlightCreator;
  * Class ClippingsParser
  * @package Jehaby\Kindle
  */
-class ClippingsParser implements Contracts\CollectionCreator{
-
-
-    private $raw_books = [];
+class ClippingsParser implements Contracts\CollectionCreator
+{
 
 
     /**
@@ -47,8 +45,15 @@ class ClippingsParser implements Contracts\CollectionCreator{
 
         foreach ($raw_highlights as $key => $raw_highlight) {
 
+//            var_dump(memory_get_peak_usage());
+//            var_dump(memory_get_peak_usage(true));
+
             try {
+                $before = memory_get_peak_usage();
+                $before2 = memory_get_usage();
                 $collection->push($this->highlightCreator->createHighlight($raw_highlight));
+//                var_dump('peak: ' . (memory_get_peak_usage() - $before));
+//                var_dump('mem: ' . (memory_get_usage() - $before2));
             } catch (\Exception $e) {
                 // TODO: log exception somewhere!
                 continue;
@@ -59,9 +64,6 @@ class ClippingsParser implements Contracts\CollectionCreator{
 
         return $collection;
     }
-
-
-
 
 
 

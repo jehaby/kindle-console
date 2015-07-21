@@ -24,6 +24,10 @@ class Client {
     public function doStuff()
     {
 
+        var_dump(memory_get_peak_usage());
+        var_dump(memory_get_peak_usage(true));
+
+
         $collection = $this->factory->createCollection(file_get_contents('My Clippings.txt'));
 
         $res = $collection->filter(function($item) {
@@ -32,11 +36,14 @@ class Client {
 
 //        $res = $collection->phrases();
 
-        $res = $collection->phrases()->english();
+        $res = $collection->words()->english()->search('');
 
 
         var_dump(count($res));
         var_dump($res);
+
+        var_dump(memory_get_peak_usage());
+        var_dump(memory_get_peak_usage(true));
 
 
         die();

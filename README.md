@@ -1,3 +1,6 @@
+
+
+
 # What it has to do? #
 
 Коллекция объектов `Highlight` хранится в базе данных.
@@ -77,9 +80,9 @@ Should I have subclasses for Highlight? Like Word, Phrase?
 
 
 
+--------------------------------------------------
 
-
-
+illuminate/filesystem suggests installing league/flysystem (Required to use the Flysystem local and FTP drivers (~1.0).)
 
 
 
