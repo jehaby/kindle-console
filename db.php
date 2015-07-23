@@ -1,9 +1,8 @@
 <?php
 
 
-
-require 'vendor/autoload.php';
-include "src/Book.php";
+require_once 'vendor/autoload.php';
+require_once "src/Book.php";
 
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
@@ -21,36 +20,28 @@ $capsule->addConnection([
 ]);
 
 
-
 $capsule->setEventDispatcher(new Dispatcher(new Container));
 
 
 $capsule->bootEloquent();
-
 $capsule->setAsGlobal();
 
-dropTables($capsule);
-createTables($capsule);
-fillTables($capsule);
 
-
-
-
-var_dump(Book::find(2));
+//
+//createTables($capsule);
+//fillTables($capsule);
+//
+//
+//var_dump(Book::find(2));
 
 
 // ------------------------------------------------------- //
 
-
-function dropTables(Capsule $capsule)
+function createTables(Capsule $capsule)
 {
     $capsule->schema()->dropIfExists('highlights');
     $capsule->schema()->dropIfExists('books');
-}
 
-
-function createTables(Capsule $capsule)
-{
     if (! $capsule->schema()->hasTable('highlights')) {
 
         $capsule->schema()->create('highlights', function(\Illuminate\Database\Schema\Blueprint $table) {
@@ -66,7 +57,6 @@ function createTables(Capsule $capsule)
             $table->index('text');
 
         });
-
     }
 
 
@@ -76,12 +66,11 @@ function createTables(Capsule $capsule)
 
             $table->increments('id');
             $table->string('title');
-            $table->string('author');
+            $table->string('author')->nullable();
+            $table->string('raw_data');
 
         });
-
     }
-
 }
 
 
@@ -93,12 +82,14 @@ function fillTables($capsule)
     $capsule->table('books')->insert(
         [
             [
-                'author' => 'Mark Twain',
-                'title' => 'Gek Finn',
+                'author' => 'Charles Bukowski',
+                'title' => 'Post Office',
+                'raw_data' => 'Post Office (Charles Bukowski)'
             ],
             [
-                'author' => 'Ayn Rand',
-                'title' => 'Atlas Shrugged',
+                'author' => 'Kahneman, Daniel',
+                'title' => 'Thinking, Fast and Slow',
+                'raw_data' => 'Thinking, Fast and Slow (Kahneman, Daniel)'
             ]
         ]
     );

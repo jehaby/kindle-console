@@ -37,7 +37,7 @@ class HighlightsCollectionFactory {
     public function createCollection($text_content)
     {
         if (is_array($text_content)) {
-            return new HighlightsCollection($text_content);
+            return new HighlightsCollection($text_content);  //  TODO: do I really need this? Maybe I have to combine this class with ClippingsParser
         }
 
         $this->collectionCreator->createCollection($text_content);

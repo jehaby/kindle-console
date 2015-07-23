@@ -16,27 +16,83 @@ class KindleBookCreatorSpec extends ObjectBehavior
         $this->shouldHaveType('Jehaby\Kindle\KindleBookCreator');
     }
 
-    
+
     function it_parses_austronaut_book ()
     {
         $this
-            ->createBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)")
-            ->shouldBeLike(new Book("An Astronaut's Guide to Life on Earth", "Chris Hadfield"));
+            ->parseBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)")
+            ->shouldReturn("An Astronaut's Guide to Life on Earth (Chris Hadfield)");
+
+        $this->getBooks()->shouldBeLike([
+
+            "An Astronaut's Guide to Life on Earth (Chris Hadfield)" =>
+                new Book([
+                    'title' => "An Astronaut's Guide to Life on Earth",
+                    'author' => 'Chris Hadfield',
+                    'raw_data' => "An Astronaut's Guide to Life on Earth (Chris Hadfield)",
+                ]),
+
+        ]);
     }
 
-    function it_parses_post_office_book ()
+    function it_parses_two_books ()
     {
+
         $this
-            ->createBook("Post Office (Charles Bukowski)")
-            ->shouldBeLike(new Book("Post Office", "Charles Bukowski"));
+            ->parseBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)")
+            ->shouldReturn("An Astronaut's Guide to Life on Earth (Chris Hadfield)");
+
+        $this->parseBook("Post Office (Charles Bukowski)")->shouldReturn("Post Office (Charles Bukowski)");
+
+
+
+        $this->getBooks()->shouldBeLike([
+
+            "An Astronaut's Guide to Life on Earth (Chris Hadfield)" =>
+                new Book([
+                    'title' => "An Astronaut's Guide to Life on Earth",
+                    'author' => 'Chris Hadfield',
+                    'raw_data' => "An Astronaut's Guide to Life on Earth (Chris Hadfield)",
+                ]),
+
+            "Post Office (Charles Bukowski)" =>
+                new Book([
+                    'title' => "Post Office",
+                    'author' => 'Charles Bukowski',
+                    'raw_data' => "Post Office (Charles Bukowski)",
+                ]),
+
+        ]);
+
+
+// Doesn't work, because it is looking for specific objects, as I think. Don't know how to fix it yet.
+//        $this->getBooks()->shouldHaveKeyWithValue(
+//            "An Astronaut's Guide to Life on Earth (Chris Hadfield)",
+//            new Book([
+//                'title' => "An Astronaut's Guide to Life on Earth",
+//                'author' => 'Chris Hadfield',
+//                'raw_data' => "An Astronaut's Guide to Life on Earth (Chris Hadfield)",
+//            ]));
+
+
     }
 
 
     function it_parses_book_without_author ()
     {
-        $this
-            ->createBook("The New Oxford American Dictionary")
-            ->shouldBeLike(new Book("The New Oxford American Dictionary"));
+        $this->parseBook("The New Oxford American Dictionary")->shouldReturn("The New Oxford American Dictionary");
+
+        $this->getBooks()->shouldBeLike([
+
+            "The New Oxford American Dictionary" =>
+                new Book([
+                    'title' => "The New Oxford American Dictionary",
+                    'raw_data' => "The New Oxford American Dictionary",
+                ]),
+
+        ]);
+
+
     }
 
 

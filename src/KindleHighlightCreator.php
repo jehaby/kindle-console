@@ -33,14 +33,14 @@ class KindleHighlightCreator implements HighlightCreatorContract
 
         $text = trim($res[3], " \t\n\r\0\x0B.,?-!:.\";)(“”…�`'");
 
-        return new Highlight (
-            $text,
-            $this->bookCreator->createBook(trim($res[0])),
-            $this->detectType($text),
-            $this->parseDate(substr($res[1], strrpos($res[1], '|'))),    // TODO: I guess this is suck and should be refactored
-            $this->parseLocation(substr($res[1], 0, strrpos($res[1], '|'))),
-            $res[3]
-        );
+        return new Highlight([
+            'text' => $text,
+            'book_id' => $this->bookCreator->parseBook($raw_data), // TODO: think about it. Maybe it's better to store Book instance here?
+            'type' =>  $this->detectType($text),
+            'date' => $this->parseDate(substr($res[1], strrpos($res[1], '|'))),    // TODO: I guess this sucks and should be refactored
+            'location' => $this->parseLocation(substr($res[1], 0, strrpos($res[1], '|'))),
+        ]);
+
     }
 
 

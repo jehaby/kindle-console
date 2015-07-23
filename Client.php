@@ -24,6 +24,12 @@ class Client {
     public function doStuff()
     {
 
+        $bookCreator = new Kindle\KindleBookCreator();
+        var_dump($bookCreator->parseBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)"));
+        var_dump($bookCreator->getBooks());
+
+        die();
+
         var_dump(memory_get_peak_usage());
         var_dump(memory_get_peak_usage(true));
 
