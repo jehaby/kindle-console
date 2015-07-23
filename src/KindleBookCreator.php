@@ -37,6 +37,12 @@ class KindleBookCreator
 
                 if (str_contains($raw_data, '(')) {  // book with author   TODO: refactor to one regex, without if
                     preg_match('/(.*) \((.*)\)$/', $raw_data, $matches ); // TODO: test speed with other implementations (string search) Think about optimizing regex
+
+                    if (count($matches) != 3) {
+                        var_dump($raw_data);
+                        var_dump($matches);
+                        die();
+                    }
                     $this->books[$raw_data] = new Book([
                         'title' => $matches[1],
                         'author' => $matches[2],

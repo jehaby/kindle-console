@@ -2,7 +2,7 @@
 
 require 'vendor/autoload.php';
 
-use \Jehaby\Kindle;
+use \Jehaby\Kindle\ClippingsParser;
 
 
 
@@ -14,47 +14,47 @@ class Client {
     private $factory;
 
 
-
-    public function __construct() {
-
-        $this->factory = new Kindle\HighlightsCollectionFactory();
-
+    public function __construct()
+    {
+        $this->factory = new ClippingsParser();
     }
+
 
     public function doStuff()
     {
 
-        $bookCreator = new Kindle\KindleBookCreator();
-        var_dump($bookCreator->parseBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)"));
-        var_dump($bookCreator->getBooks());
+//        $bookCreator = new Kindle\KindleBookCreator();
+//        var_dump($bookCreator->parseBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)"));
+//        var_dump($bookCreator->getBooks());
+//
+//        die();
 
-        die();
-
-        var_dump(memory_get_peak_usage());
-        var_dump(memory_get_peak_usage(true));
+//        var_dump(memory_get_peak_usage());
+//        var_dump(memory_get_peak_usage(true));
 
 
-        $collection = $this->factory->createCollection(file_get_contents('My Clippings.txt'));
 
-        $res = $collection->filter(function($item) {
-            return substr_count($item->getText(), ' ') > 1;
-        });
+        $this->factory->createCollection(file_get_contents('My Clippings.txt'));
+
+        $collection = $this->factory->getCollection();
+
+        var_dump($collection);
+
+//        $res = $collection->filter(function($item) {
+//            return substr_count($item->getText(), ' ') > 1;
+//        });
 
 //        $res = $collection->phrases();
 
         $res = $collection->words()->english()->search('');
 
-
         var_dump(count($res));
         var_dump($res);
 
-        var_dump(memory_get_peak_usage());
-        var_dump(memory_get_peak_usage(true));
-
+//        var_dump(memory_get_peak_usage());
+//        var_dump(memory_get_peak_usage(true));
 
         die();
-
-
 
 
         $res = $collection->filter(function($item) {
@@ -76,11 +76,9 @@ class Client {
         var_dump(count($res));
         print_r($res);
 
-
         foreach ($collection->groupByBooks() as $key => $value) {
             echo trim($key) . ' => ' . count($value) . "\n";
         }
-
 
         $fromBook = $collection->getFromBook('Pro Git');
         var_dump($fromBook->count());
