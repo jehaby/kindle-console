@@ -7,12 +7,11 @@ use Jehaby\Kindle\Contracts\HighlightCreator;
 
 
 /**
- * Class ClippingsParser
+ * Class KindleCollectionCreator
  * @package Jehaby\Kindle
  */
-class ClippingsParser implements Contracts\CollectionCreator
+class KindleCollectionCreator implements Contracts\CollectionCreator
 {
-
 
     /**
      * @var
@@ -20,9 +19,8 @@ class ClippingsParser implements Contracts\CollectionCreator
     private $collection;
 
 
-
     /**
-     * ClippingsParser constructor.
+     * KindleCollectionCreator constructor.
      * @param array $raw_books
      */
     public function __construct(HighlightCreator $highlightCreator = null)
@@ -31,12 +29,11 @@ class ClippingsParser implements Contracts\CollectionCreator
     }
 
 
-
     /**
      * @param $file_content
      * @return HighlightsCollection
      */
-    private function parseFile($file_content)
+    protected function parseFile($file_content)
     {
         
         $raw_highlights = explode("==========", $file_content);
@@ -50,7 +47,7 @@ class ClippingsParser implements Contracts\CollectionCreator
                 $collection->push($this->highlightCreator->createHighlight($raw_highlight));
 
             } catch (\Exception $e) {
-                // TODO: log exception somewhere!
+                // TODO: log exception somewhere! Think about its type!
                 continue;
             }
 
@@ -61,22 +58,17 @@ class ClippingsParser implements Contracts\CollectionCreator
     }
 
 
-
     /**
      * @param $file_content
      */
     public function createCollection($file_content)
     {
-        if (is_array($file_content)) {
-            return new HighlightsCollection($file_content);  //  TODO: do I really need this? Maybe I have to combine this class with ClippingsParser
-        }
-
         $this->collection = $this->parseFile($file_content);
     }
 
 
     /**
-     * @return mixed
+     * @return HighlightsCollection
      */
     public function getCollection()
     {

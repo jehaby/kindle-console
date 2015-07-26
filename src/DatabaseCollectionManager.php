@@ -19,27 +19,65 @@ use Symfony\Component\Finder\Comparator\Comparator;
  *
  * @package Jehaby\Kindle
  */
-class DatabaseCollectionManager implements Contracts\CollectionCreator
+class DatabaseCollectionManager
 {
 
-    private $collection;
+    /**
+     * @var
+     */
+    protected $collection;
 
 
     /**
-     * @return mixed
+     *
+     * @var
      */
-    public function createCollection($file_content)
-    {
+    protected $diff;
 
-        // TODO: Implement createCollection() method.
+
+    /**
+     * @var
+     */
+    protected $capsule;
+
+    /**
+     * DatabaseCollectionManager constructor.
+     * @param $capsule
+     */
+    public function __construct($capsule)
+    {
+        $this->capsule = $capsule;
+        $this->collection = Highlight::all()->keyBy($this->keyGenerator);  // TODO: do I need to move it to createCollection method?
     }
+
+    /**
+     * DatabaseCollectionManager constructor.
+     * @param $collection
+     */
+
 
 
     /**
      * Writes collection to database
      */
-    public function writeCollection()
+    public function writeCollection(HighlightsCollection $highlights, HighlightsCollection $books = null)
     {
+
+//        var_dump($highlights->chunk(100)->toArray());
+//        die();
+
+        var_dump(Highlight::all()->all());
+
+        die();
+
+
+        $this->capsule->table('highlights')->insert(
+            $highlights->chunk(5)[2]->toArray()
+        );
+
+
+
+        // first writes books, then highlights
 
     }
 
@@ -56,12 +94,35 @@ class DatabaseCollectionManager implements Contracts\CollectionCreator
     /**
      * @param mixed $collection
      */
-    public function setCollection($collection)
+    public function setCollection($collection)  // TODO: do I need this?
     {
         $this->collection = $collection;
     }
 
 
+    /**
+     * Compares with collection from file
+     *
+     * @param $collectionFromFile
+     */
+    public function compare($collectionFromFile)
+    {
+
+
+    }
+
+
+
+    protected function keyGenerator ($item)
+    {
+        return md5($item->text . $item->location);
+    }
+
+
+
+    /**
+     * @param HighlightsCollection $collectionFromFile
+     */
     public function addHighlights(HighlightsCollection $collectionFromFile)
     {
 
@@ -69,3 +130,14 @@ class DatabaseCollectionManager implements Contracts\CollectionCreator
 
 
 }
+
+
+
+
+
+
+
+
+
+
+

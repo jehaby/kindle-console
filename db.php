@@ -27,7 +27,7 @@ $capsule->bootEloquent();
 $capsule->setAsGlobal();
 
 
-//
+
 //createTables($capsule);
 //fillTables($capsule);
 //
@@ -50,10 +50,11 @@ function createTables(Capsule $capsule)
             $table->string('text');
             $table->string('location');
             $table->tinyInteger('type');
-            $table->dateTimeTz('dateAdded'); // TODO: figure out how to use it. Think about naming
+            $table->string('date_added'); // TODO: figure out how to use it. Think about naming
             $table->integer('book_id')->unsigned();
 
             $table->foreign('book_id')->references('id')->on('books');
+            $table->unique(['text', 'location', 'book_id']);
             $table->index('text');
 
         });

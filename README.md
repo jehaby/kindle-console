@@ -46,7 +46,7 @@
 
 
 
-Поиск по словам (так ли нужно? ).
+Поиск по словам ( так ли нужно? ).
 
 
 --------------------------------------------------
@@ -87,3 +87,6 @@ illuminate/filesystem suggests installing league/flysystem (Required to use the 
 
 
 
+## Where I stopped ##
+
+Implement diff method in DatabaseCollectionManager! 

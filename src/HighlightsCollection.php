@@ -53,7 +53,7 @@ class HighlightsCollection extends Collection {
     public function english()
     {
         return $this->filter(function (Highlight $item) {
-            return ! preg_match('/[А-Яа-яЁё]/u', $item->getText());
+            return ! preg_match('/[А-Яа-яЁё]/u', $item->text);
         });
     }
 
@@ -61,13 +61,13 @@ class HighlightsCollection extends Collection {
     public function russian()
     {
         return $this->filter(function (Highlight $item) {
-            return preg_match('/[А-Яа-яЁё]/u', $item->getText());
+            return preg_match('/[А-Яа-яЁё]/u', $item->text);
         });
 
     }
 
     
-    public function fromBook($book)  // TODO: think about better implementation
+    public function fromBook($book)
     {
         return $this->filter(function($item) use ($book) {
             return $item->getBook() == $book;

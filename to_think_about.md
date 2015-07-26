@@ -33,7 +33,6 @@ Should it be as dependancy? (Probably)
 
 
 
-
 ## DB ##
 
 What do I need?
@@ -43,4 +42,20 @@ Highlights table.
 
 
 
-Users? 
+Users?
+
+
+
+## Main ##
+
+
+User load new file, there may be new highlights and old (which already stored in database).
+
+
+## What is the best way to compare new and old highlights?  ##
+
+
+
+
+
+

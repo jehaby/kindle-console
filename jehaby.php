@@ -7,4 +7,14 @@ use \Illuminate\Support\Collection;
 
 
 
+
+$fromDB = new DatabaseCollectionCreator();
+
+$newHighlights = new KindleHighlightsCreator();
+
+
+$fromDB->getNew
+
+
+
  //data_get();

@@ -16,6 +16,12 @@ class Book extends Model
     private $raw_data;
 
 
+    public function highlights()
+    {
+        return $this->hasMany('Highlight');
+    }
+
+
 //    /**
 //     * Book constructor.
 //     * @param $title

@@ -1,4 +1,5 @@
 <?php namespace Jehaby\Kindle\Contracts;
+use Jehaby\Kindle\HighlightsCollection;
 
 
 /**
@@ -8,7 +9,8 @@ interface CollectionCreator {
 
 
     /**
-     * @return mixed
+     * @param string @file_content
+     * @return HighlightsCollection
      */
     public function createCollection($file_content);
 

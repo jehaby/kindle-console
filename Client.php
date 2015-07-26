@@ -2,7 +2,9 @@
 
 require 'vendor/autoload.php';
 
-use \Jehaby\Kindle\ClippingsParser;
+use \Jehaby\Kindle\KindleCollectionCreator;
+use Carbon\Carbon;
+use Jehaby\Kindle\Highlight;
 
 
 
@@ -11,17 +13,46 @@ use \Jehaby\Kindle\ClippingsParser;
 class Client {
 
 
+
+
     private $factory;
 
 
     public function __construct()
     {
-        $this->factory = new ClippingsParser();
+        $this->factory = new KindleCollectionCreator();
     }
+
 
 
     public function doStuff()
     {
+
+        global $capsule;  // TODO: this is shame
+
+
+        $f = function ($item) {
+            return md5($item->text . $item->location);
+        };
+
+
+
+        var_dump(Highlight::all()->keyBy($f)->toArray());
+
+
+        $manager = new \Jehaby\Kindle\DatabaseCollectionManager($capsule);
+
+        $this->factory->createCollection(file_get_contents('My Clippings.txt'));
+
+        $highlights = $this->factory->getCollection();
+
+        var_dump($highlights->take(10)->keyBy($f)->toArray());
+
+
+
+//        $manager->writeCollection($highlights, null);
+
+        die();
 
 //        $bookCreator = new Kindle\KindleBookCreator();
 //        var_dump($bookCreator->parseBook("An Astronaut's Guide to Life on Earth (Chris Hadfield)"));
@@ -33,12 +64,30 @@ class Client {
 //        var_dump(memory_get_peak_usage(true));
 
 
+//
+//        $h = new \Jehaby\Kindle\Highlight([
+//            'location' => '12-34',
+//            'text' => 'fuck',
+//            'book_id' => '2',
+//            'type' => 0,
+//            'dateAdded' => null,
+//        ]);
+//
+//        var_dump($h);
+//
+//        var_dump($h->text);
+//
+//        die();git
+
+
+
 
         $this->factory->createCollection(file_get_contents('My Clippings.txt'));
 
         $collection = $this->factory->getCollection();
 
-        var_dump($collection);
+//        var_dump($collection);
+
 
 //        $res = $collection->filter(function($item) {
 //            return substr_count($item->getText(), ' ') > 1;
@@ -46,10 +95,10 @@ class Client {
 
 //        $res = $collection->phrases();
 
-        $res = $collection->words()->english()->search('');
+        $res = $collection->phrases()->english()->toArray();
 
         var_dump(count($res));
-        var_dump($res);
+        print_r($res);
 
 //        var_dump(memory_get_peak_usage());
 //        var_dump(memory_get_peak_usage(true));
