@@ -40,6 +40,10 @@ class DatabaseCollectionManager
      */
     protected $capsule;
 
+
+    protected $keyGenerator;
+
+
     /**
      * DatabaseCollectionManager constructor.
      * @param $capsule
@@ -47,6 +51,12 @@ class DatabaseCollectionManager
     public function __construct($capsule)
     {
         $this->capsule = $capsule;
+
+        $this->keyGenerator = function ($item)
+        {
+            return md5($item->text . $item->location);
+        };
+
         $this->collection = Highlight::all()->keyBy($this->keyGenerator);  // TODO: do I need to move it to createCollection method?
     }
 
@@ -75,10 +85,15 @@ class DatabaseCollectionManager
             $highlights->chunk(5)[2]->toArray()
         );
 
-
-
         // first writes books, then highlights
+    }
 
+    /**
+     * @return mixed
+     */
+    public function getDiff()
+    {
+        return $this->diff;
     }
 
 
@@ -105,17 +120,18 @@ class DatabaseCollectionManager
      *
      * @param $collectionFromFile
      */
-    public function compare($collectionFromFile)
+    public function compare(HighlightsCollection $collectionFromFile)
     {
+        $this->diff = new HighlightsCollection();
 
+        $collectionFromFile = $collectionFromFile->keyBy($this->keyGenerator);
 
-    }
+        foreach ($collectionFromFile as $key => $item) {
 
-
-
-    protected function keyGenerator ($item)
-    {
-        return md5($item->text . $item->location);
+            if (! isset($this->collection[$key])) {
+                $this->diff->put($key, $item);
+            }
+        }
     }
 
 
@@ -130,14 +146,3 @@ class DatabaseCollectionManager
 
 
 }
-
-
-
-
-
-
-
-
-
-
-

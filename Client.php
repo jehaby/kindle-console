@@ -3,6 +3,8 @@
 require 'vendor/autoload.php';
 
 use \Jehaby\Kindle\KindleCollectionCreator;
+use Jehaby\Kindle\DatabaseCollectionManager;
+
 use Carbon\Carbon;
 use Jehaby\Kindle\Highlight;
 
@@ -31,26 +33,15 @@ class Client {
         global $capsule;  // TODO: this is shame
 
 
-        $f = function ($item) {
-            return md5($item->text . $item->location);
-        };
-
-
-
-        var_dump(Highlight::all()->keyBy($f)->toArray());
-
-
-        $manager = new \Jehaby\Kindle\DatabaseCollectionManager($capsule);
+        $manager = new DatabaseCollectionManager($capsule);
 
         $this->factory->createCollection(file_get_contents('My Clippings.txt'));
 
         $highlights = $this->factory->getCollection();
 
-        var_dump($highlights->take(10)->keyBy($f)->toArray());
+        $manager->compare($highlights->take(10));
 
-
-
-//        $manager->writeCollection($highlights, null);
+        var_dump($manager->getDiff()->toArray());
 
         die();
 
