@@ -89,4 +89,4 @@ illuminate/filesystem suggests installing league/flysystem (Required to use the 
 
 ## Where I stopped ##
 
-Implement diff method in DatabaseCollectionManager! 
+Implement diff method in DatabaseCollectionManager!

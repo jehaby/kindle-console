@@ -14,7 +14,7 @@ class Highlight extends Model
 
     protected $location;
 
-    protected $text;
+    public $text;
 
     protected $bookId;
 
@@ -27,7 +27,7 @@ class Highlight extends Model
 
     public function book()
     {
-        return $this->belongsTo('Book');
+        return $this->belongsTo('Jehaby\Kindle\Book');
     }
 
 

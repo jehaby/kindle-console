@@ -29,8 +29,8 @@ class DatabaseCollectionManager
 
 
     /**
-     *
-     * @var
+     *  Contains new item. It's populated in compare method.
+     * @var HighlightsCollection
      */
     protected $diff;
 
@@ -54,42 +54,27 @@ class DatabaseCollectionManager
 
         $this->keyGenerator = function ($item)
         {
-            return md5($item->text . $item->location);
+            return md5($item->text . $item->location);  // TODO: add book info
         };
 
         $this->collection = Highlight::all()->keyBy($this->keyGenerator);  // TODO: do I need to move it to createCollection method?
     }
 
-    /**
-     * DatabaseCollectionManager constructor.
-     * @param $collection
-     */
-
-
 
     /**
      * Writes collection to database
      */
-    public function writeCollection(HighlightsCollection $highlights, HighlightsCollection $books = null)
+    public function writeCollection(HighlightsCollection $highlights = null, HighlightsCollection $books = null)
     {
 
-//        var_dump($highlights->chunk(100)->toArray());
-//        die();
+        foreach($this->diff->chunk(50)->toArray() as $chunk) {   // TODO: think about chunks number. Think about speed and memory!
+            $this->capsule->table('highlights')->insert($chunk);
+        }
 
-        var_dump(Highlight::all()->all());
-
-        die();
-
-
-        $this->capsule->table('highlights')->insert(
-            $highlights->chunk(5)[2]->toArray()
-        );
-
-        // first writes books, then highlights
     }
 
     /**
-     * @return mixed
+     * @return HighlightsCollection
      */
     public function getDiff()
     {
@@ -98,7 +83,7 @@ class DatabaseCollectionManager
 
 
     /**
-     * @return mixed
+     * @return HighlightsCollection
      */
     public function getCollection()
     {

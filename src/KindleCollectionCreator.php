@@ -47,7 +47,7 @@ class KindleCollectionCreator implements Contracts\CollectionCreator
                 $collection->push($this->highlightCreator->createHighlight($raw_highlight));
 
             } catch (\Exception $e) {
-                // TODO: log exception somewhere! Think about its type!
+                // TODO: log exception somewhere! Think about its type! It was really bad idead to catch general exception!!! 2
                 continue;
             }
 

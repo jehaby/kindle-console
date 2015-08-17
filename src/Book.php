@@ -15,10 +15,12 @@ class Book extends Model
 
     private $raw_data;
 
+    public $timestamps = false;
+
 
     public function highlights()
     {
-        return $this->hasMany('Highlight');
+        return $this->hasMany('Jehaby\Kindle\Highlight');
     }
 
 

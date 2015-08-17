@@ -7,14 +7,15 @@ use Jehaby\Kindle\DatabaseCollectionManager;
 
 use Carbon\Carbon;
 use Jehaby\Kindle\Highlight;
+use Jehaby\Kindle\Book;
 
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
 
 
 
 
 class Client {
-
-
 
 
     private $factory;
@@ -27,21 +28,54 @@ class Client {
 
 
 
+
+
     public function doStuff()
     {
 
-        global $capsule;  // TODO: this is shame
+        $this->getCollectionFromFile();
+
+        die();
+
+        error_reporting(E_ALL);
+
+        $res = $this->getCollectionFromDB()->values();
+
+        $book_ids = $res->unique('book_id')->pluck('book_id');  // TODO: I NEED THIS
+        $books = Book::query()->whereIn('id', $book_ids->toArray())->get()->keyBy('id');
+
+//
+//        var_dump($books->toArray());
+
+//
+//        echo json_encode($res->toArray());
+//
+//        echo '========================';
+//
+//        echo json_encode($books->toArray());
+//
+//        echo '========================';
+//
 
 
-        $manager = new DatabaseCollectionManager($capsule);
+//        var_dump($books->toJson());
 
-        $this->factory->createCollection(file_get_contents('My Clippings.txt'));
+        header('Access-Control-Allow-Origin: *');
 
-        $highlights = $this->factory->getCollection();
+        $json = json_encode([
+            'highlights' => $res->toArray(),
+            'books' => $books->toArray()
+        ]);
 
-        $manager->compare($highlights->take(10));
+        if (! $json) {
+            var_dump(json_last_error());
+            var_dump(json_last_error_msg());
+        }
 
-        var_dump($manager->getDiff()->toArray());
+        file_put_contents('output.json', $json);
+
+        echo($json);
+
 
         die();
 
@@ -72,7 +106,6 @@ class Client {
 
 
 
-
         $this->factory->createCollection(file_get_contents('My Clippings.txt'));
 
         $collection = $this->factory->getCollection();
@@ -86,10 +119,10 @@ class Client {
 
 //        $res = $collection->phrases();
 
-        $res = $collection->phrases()->english()->toArray();
+        $collectionFromFile = $collection->phrases()->english()->toArray();
 
-        var_dump(count($res));
-        print_r($res);
+        var_dump(count($collectionFromFile));
+        print_r($collectionFromFile);
 
 //        var_dump(memory_get_peak_usage());
 //        var_dump(memory_get_peak_usage(true));
@@ -97,24 +130,24 @@ class Client {
         die();
 
 
-        $res = $collection->filter(function($item) {
+        $collectionFromFile = $collection->filter(function($item) {
             return preg_match('/[^a-zA-Z]/', $item->getText()) && ! strpos($item->getText(), ' ');
         });
 
-        var_dump(count($res));
-        print_r($res);
+        var_dump(count($collectionFromFile));
+        print_r($collectionFromFile);
 
 
         die();
 
-        $res = $collection->groupBy(function(Kindle\Highlight $item) {
+        $collectionFromFile = $collection->groupBy(function(Kindle\Highlight $item) {
             return $item->getText();
         })->filter(function($item) {
             return count($item) == 4;
         });
 
-        var_dump(count($res));
-        print_r($res);
+        var_dump(count($collectionFromFile));
+        print_r($collectionFromFile);
 
         foreach ($collection->groupByBooks() as $key => $value) {
             echo trim($key) . ' => ' . count($value) . "\n";
@@ -130,6 +163,42 @@ class Client {
 
     }
 
+    private function getCollectionFromFile($filename = 'My Clippings.txt')
+    {
+        $this->factory->createCollection(file_get_contents($filename));
+        $res = $this->factory->getCollection();
+        var_dump($res);
+    }
+
+
+    public function getCollectionFromDB() {
+        global $capsule;
+
+        $manager = new DatabaseCollectionManager($capsule);
+        return $manager->getCollection();
+    }
+
+    public function writeFromFileToDB($filename = 'MyClippings.txt')
+    {
+        global $capsule;
+
+        $manager = new DatabaseCollectionManager($capsule);
+
+        $this->factory->createCollection(file_get_contents('My Clippings.txt'));
+        $collectionFromFile = $this->factory->getCollection();
+
+        $manager->compare($collectionFromFile);
+
+        $manager->writeCollection($manager->getDiff());
+    }
+
+    public function testLogger()
+    {
+        $log = new Logger('first_logger');
+        $log->pushHandler(new StreamHandler('storage/logs/log101.log'));
+
+        $log->addDebug('Hey!', get_object_vars($this));
+    }
 
 
 }

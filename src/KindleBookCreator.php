@@ -8,56 +8,57 @@ class KindleBookCreator
 
 //    private static $instance;
 
-    private $books = [];
+    protected $books;
 
 
-//
-//    /**
-//     * KindleBookCreator constructor.
-//     */
-//    private function __construct()
-//    {
-////        self::$books = Book::all()->keyBy('raw_data');
-//    }
-//
-//
-//    public static function getInstance()
-//    {
-//        return self::$instance ? self::$instance : self::__construct();
-//    }
+
+    /**
+     * KindleBookCreator constructor.
+     */
+    public function __construct()
+    {
+        $this->books = Book::all()->keyBy('raw_data');
+    }
 
 
     /**
      * @return \Jehaby\Kindle\Book;
      */
-    public function parseBook($raw_data)
+    public function parseBook($raw_data) // TODO: there'is a possible write to DB in a loop. It should't be very often, but still maybe I should refactor it.
     {
 
-            if (! array_key_exists($raw_data, $this->books)) {  // TODO: think about speed here!
+        $raw_data = trim($raw_data);
 
-                if (str_contains($raw_data, '(')) {  // book with author   TODO: refactor to one regex, without if
-                    preg_match('/(.*) \((.*)\)$/', $raw_data, $matches ); // TODO: test speed with other implementations (string search) Think about optimizing regex
+        if (! isset($this->books[$raw_data])) {
 
-                    if (count($matches) != 3) {
-                        var_dump($raw_data);
-                        var_dump($matches);
-                        die();
-                    }
-                    $this->books[$raw_data] = new Book([
-                        'title' => $matches[1],
-                        'author' => $matches[2],
-                        'raw_data' => $raw_data
-                    ]);
-                } else {  // book without author
-                    $this->books[$raw_data] = new Book([
-                        'title' => $raw_data,
-                        'raw_data' => $raw_data
-                    ]);          // TODO: I should probably check for errors here (valid argument, etc)
+            var_dump($raw_data);
+            var_dump(bin2hex($raw_data));
+
+
+            if (str_contains($raw_data, '(')) {  // book with author   TODO: refactor to one regex, without if
+                preg_match('/(.*) \((.*)\)$/', $raw_data, $matches ); // TODO: test speed with other implementations (string search) Think about optimizing regex
+
+                if (count($matches) != 3) {
+                    var_dump($raw_data);
+                    var_dump($matches);
+                    die();   // TODO: better throw Exception here!
                 }
 
+                $this->books[$raw_data] = Book::create([
+                    'title' => $matches[1],
+                    'author' => $matches[2],
+                    'raw_data' => $raw_data
+                ]);
+            } else {  // book without author
+                $this->books[$raw_data] = Book::create([
+                    'title' => $raw_data,
+                    'raw_data' => $raw_data
+                ]);          // TODO: I should probably check for errors here (valid argument, etc)
             }
 
-        return $raw_data;
+        }
+
+        return $this->books[$raw_data]->getKey();
 
     }
 
