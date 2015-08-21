@@ -65,17 +65,7 @@ How to store Highlights:
 
 It will be harder to get highlights from specific book.
 
-
-
 Should I have subclasses for Highlight? Like Word, Phrase?
-
-
-
-
-
-
-
-
 
 
 

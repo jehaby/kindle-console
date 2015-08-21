@@ -1,9 +1,6 @@
 <?php
 
 
-require_once 'vendor/autoload.php';
-require_once "src/Book.php";
-
 use Illuminate\Events\Dispatcher;
 use Illuminate\Container\Container;
 use Illuminate\Database\Capsule\Manager as Capsule;
@@ -11,20 +8,23 @@ use Jehaby\Kindle\Book;
 use Jehaby\Kindle\Highlight;
 
 
-$capsule = new Capsule();
+$container->singleton('Illuminate\Database\Capsule\Manager', function() {
 
-$capsule->addConnection([
-    'driver' => 'sqlite',
-    'database' => 'storage/database.sqlite',
-//    'prefix'   => '',
-]);
+    $capsule = new Capsule();
 
+    $capsule->addConnection([
+        'driver' => 'sqlite',
+        'database' => 'storage/database.sqlite',
+    ]);
 
-$capsule->setEventDispatcher(new Dispatcher(new Container));
+    $capsule->setEventDispatcher(new Dispatcher(new Container));
+    $capsule->bootEloquent();
 
+    return $capsule;
 
-$capsule->bootEloquent();
-$capsule->setAsGlobal();
+});
+
+//$capsule->setAsGlobal();
 
 
 

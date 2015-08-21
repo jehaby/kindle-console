@@ -11,7 +11,7 @@ class KindleDateParser implements DateParser
     public function parse($raw_date)
     {
 
-        if (preg_match('/AM|PM$/', $raw_date)) {
+        if (preg_match('/AM|PM$/', trim($raw_date))) {   // TODO: maybe trim should be in some other place?
 
             return Carbon::createFromFormat(
                 'M d, Y, g:i a',

@@ -4,6 +4,9 @@
 use Illuminate\Support\Collection;
 use Jehaby\Kindle\Contracts\BookCreator;
 use Jehaby\Kindle\Contracts\HighlightCreator;
+use Monolog\Logger;
+use Monolog\Handler\StreamHandler;
+
 
 
 /**
@@ -26,6 +29,8 @@ class KindleCollectionCreator implements Contracts\CollectionCreator
     public function __construct(HighlightCreator $highlightCreator = null)
     {
         $this->highlightCreator = $highlightCreator ? $highlightCreator : new KindleHighlightCreator();
+        $this->logger = new Logger('KindleCollectionCreator');
+        $this->logger->pushHandler(new StreamHandler('storage/logs/log101.log'));
     }
 
 
@@ -47,7 +52,10 @@ class KindleCollectionCreator implements Contracts\CollectionCreator
                 $collection->push($this->highlightCreator->createHighlight($raw_highlight));
 
             } catch (\Exception $e) {
-                // TODO: log exception somewhere! Think about its type! It was really bad idead to catch general exception!!! 2
+                $this->logger->addDebug("Can't push highlight", [
+                    'e: ' => $e
+                ]);
+                // TODO: log exception somewhere! Think about its type! It was really bad idea to catch general exception!!! 2
                 continue;
             }
 

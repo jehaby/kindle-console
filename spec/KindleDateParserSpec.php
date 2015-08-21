@@ -28,4 +28,14 @@ class KindleDateParserSpec extends ObjectBehavior
             ->shouldBeLike(Carbon::create(2014, 3, 1, 1, 47, 03));
     }
 
+    function it_parses_date3()
+    {
+        $this->parse("| Added on Friday, November 04, 2011, 11:53 PM\r")
+            ->shouldBeLike(Carbon::create(2011, 11, 4, 23, 53));
+    }
+
+
+
+
+
 }

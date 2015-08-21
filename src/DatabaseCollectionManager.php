@@ -48,13 +48,13 @@ class DatabaseCollectionManager
      * DatabaseCollectionManager constructor.
      * @param $capsule
      */
-    public function __construct($capsule)
+    public function __construct(\Illuminate\Database\Capsule\Manager $capsule)
     {
         $this->capsule = $capsule;
 
         $this->keyGenerator = function ($item)
         {
-            return md5($item->text . $item->location);  // TODO: add book info
+            return md5($item->getAttributes()['text'] . $item->location);  // TODO: add book info; TODO2 why $item->text doesn't work?
         };
 
         $this->collection = Highlight::all()->keyBy($this->keyGenerator);  // TODO: do I need to move it to createCollection method?
@@ -72,6 +72,7 @@ class DatabaseCollectionManager
         }
 
     }
+
 
     /**
      * @return HighlightsCollection
@@ -105,20 +106,16 @@ class DatabaseCollectionManager
      *
      * @param $collectionFromFile
      */
-    public function compare(HighlightsCollection $collectionFromFile)
+    public function createDiffCollection(HighlightsCollection $collectionFromFile)
     {
         $this->diff = new HighlightsCollection();
 
-        $collectionFromFile = $collectionFromFile->keyBy($this->keyGenerator);
-
-        foreach ($collectionFromFile as $key => $item) {
-
+        foreach ($collectionFromFile->keyBy($this->keyGenerator) as $key => $item) {
             if (! isset($this->collection[$key])) {
                 $this->diff->put($key, $item);
             }
         }
     }
-
 
 
     /**

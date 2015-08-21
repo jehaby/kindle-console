@@ -13,7 +13,8 @@
     "illuminate/console": "^5.1",
     "illuminate/filesystem": "^5.1",
     "illuminate/events": "^5.1",
-    "monolog/monolog": "^1.16"
+    "monolog/monolog": "^1.16",
+    "league/route": "^1.1"
   },
   "autoload": {
     "psr-4": {"Jehaby\\Kindle\\": "src/"}

@@ -1,14 +1,11 @@
 <?php
 
-require 'vendor/autoload.php';
 
 use \Jehaby\Kindle\KindleCollectionCreator;
 use Jehaby\Kindle\DatabaseCollectionManager;
-
 use Carbon\Carbon;
 use Jehaby\Kindle\Highlight;
 use Jehaby\Kindle\Book;
-
 use Monolog\Logger;
 use Monolog\Handler\StreamHandler;
 
@@ -23,7 +20,10 @@ class Client {
 
     public function __construct()
     {
+        global $capsule;
+
         $this->factory = new KindleCollectionCreator();
+        $this->DBManager = new DatabaseCollectionManager($capsule);
     }
 
 
@@ -33,7 +33,7 @@ class Client {
     public function doStuff()
     {
 
-        $this->getCollectionFromFile();
+        $this->writeFromFileToDB();
 
         die();
 
@@ -160,36 +160,27 @@ class Client {
             return $item->getText();
         }));
 
-
     }
 
     private function getCollectionFromFile($filename = 'My Clippings.txt')
     {
         $this->factory->createCollection(file_get_contents($filename));
-        $res = $this->factory->getCollection();
-        var_dump($res);
+        return $this->factory->getCollection();
     }
 
 
-    public function getCollectionFromDB() {
-        global $capsule;
+    public function getCollectionFromDB()
+    {
+        global $capsule;   // TODO: how can I refactor this? (move to constructor?... )
 
         $manager = new DatabaseCollectionManager($capsule);
         return $manager->getCollection();
     }
 
-    public function writeFromFileToDB($filename = 'MyClippings.txt')
+    public function writeFromFileToDB($filename = 'My Clippings.txt')
     {
-        global $capsule;
-
-        $manager = new DatabaseCollectionManager($capsule);
-
-        $this->factory->createCollection(file_get_contents('My Clippings.txt'));
-        $collectionFromFile = $this->factory->getCollection();
-
-        $manager->compare($collectionFromFile);
-
-        $manager->writeCollection($manager->getDiff());
+        $this->DBManager->createDiffCollection($this->getCollectionFromFile($filename));
+        $this->DBManager->writeCollection($this->DBManager->getDiff());
     }
 
     public function testLogger()
